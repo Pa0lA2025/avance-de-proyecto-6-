@@ -1,0 +1,42 @@
+Estructura de mi proyecto de gestor de notas 
+sistema_notas/
+├── sistema_notas.py         ← Tu código principal
+├── manual.md                ← Manual técnico en Markdown
+├── ejemplos/                ← (Opcional) Ejemplos o capturas
+└── README.md                ← Breve descripción del proyecto
+Gestión de Estudiantes
+Funciones disponibles:
+- agregar_estudiante(nombre, nota)
+- buscar_estudiante(nombre)
+- actualizar_nota(nombre, nueva_nota)
+- calcular_promedio_estudiantes()
+- mostrar_estudiantes()
+
+Gestión de Cursos
+Funciones disponibles:
+- agregar_curso(nombre, nota)
+- listar_cursos()
+- eliminar_curso(nombre)
+- promedio_notas_cursos()
+ Gestor de Notas
+Clase GestorDeNotas con métodos:
+- agregar_nota(nota)
+- deshacer()
+- revisar()
+- ordenar_burbuja()
+- ordenar_insercion()
+
+Fragmento de mi codigo 
+def agregar_estudiante(nombre, nota):
+    estudiantes.append({"nombre": nombre, "nota": nota})
+    print(f"Estudiante {nombre} agregado con nota {nota}.")
+
+Algoritmos Implementados
+- Ordenamiento Burbuja
+- Ordenamiento por Inserción
+ Menú Interactivo
+El sistema cuenta con un menú principal que permite navegar entre:
+- Estudiantes
+- Cursos
+- Gestor de Notas
+Cada sección tiene submenús para realizar operaciones específicas.
