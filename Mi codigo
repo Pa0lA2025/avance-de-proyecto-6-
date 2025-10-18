@@ -1,0 +1,231 @@
+# sistema_notas.py
+
+# -------------------------------
+# Gestión de Estudiantes
+# -------------------------------
+estudiantes = []
+
+def agregar_estudiante(nombre, nota):
+    estudiantes.append({"nombre": nombre, "nota": nota})
+    print(f"Estudiante {nombre} agregado con nota {nota}.")
+
+def buscar_estudiante(nombre):
+    for estudiante in estudiantes:
+        if estudiante["nombre"].lower() == nombre.lower():
+            return estudiante
+    return None
+
+def actualizar_nota(nombre, nueva_nota):
+    estudiante = buscar_estudiante(nombre)
+    if estudiante:
+        estudiante["nota"] = nueva_nota
+        print(f"Nota de {nombre} actualizada a {nueva_nota}.")
+    else:
+        print(f"Estudiante {nombre} no encontrado.")
+
+def calcular_promedio_estudiantes():
+    if estudiantes:
+        promedio = sum(e["nota"] for e in estudiantes) / len(estudiantes)
+        print(f"Promedio de estudiantes: {promedio:.2f}")
+    else:
+        print("No hay estudiantes registrados.")
+
+def mostrar_estudiantes():
+    if estudiantes:
+        print("\nEstudiantes registrados:")
+        for e in estudiantes:
+            print(f"- {e['nombre']}: {e['nota']}")
+    else:
+        print("No hay estudiantes registrados.")
+
+# -------------------------------
+# Gestión de Cursos
+# -------------------------------
+cursos = []
+
+def agregar_curso(nombre, nota):
+    cursos.append({"nombre": nombre, "nota": nota})
+    print(f"Curso '{nombre}' agregado con nota {nota}.")
+
+def listar_cursos():
+    if cursos:
+        print("\nCursos registrados:")
+        for i, curso in enumerate(cursos, start=1):
+            print(f"{i}. {curso['nombre']} - Nota: {curso['nota']}")
+    else:
+        print("No hay cursos registrados.")
+
+def eliminar_curso(nombre):
+    for curso in cursos:
+        if curso["nombre"].lower() == nombre.lower():
+            cursos.remove(curso)
+            print(f"Curso '{nombre}' eliminado.")
+            return
+    print(f"Curso '{nombre}' no encontrado.")
+
+def promedio_notas_cursos():
+    if cursos:
+        promedio = sum(c["nota"] for c in cursos) / len(cursos)
+        print(f"Promedio de cursos: {promedio:.2f}")
+    else:
+        print("No hay cursos registrados.")
+
+# -------------------------------
+# Gestor de Notas con Historial
+# -------------------------------
+class GestorDeNotas:
+    def __init__(self):
+        self.historial = []
+        self.revision = []
+        self.notas = []
+
+    def agregar_nota(self, nota):
+        self.historial.append(("agregar", nota))
+        self.notas.append(nota)
+        self.revision.append(nota)
+        print(f"Nota agregada: {nota}")
+
+    def deshacer(self):
+        if not self.historial:
+            print("No hay acciones para deshacer.")
+            return
+        accion, nota = self.historial.pop()
+        if accion == "agregar":
+            self.notas.remove(nota)
+            self.revision.remove(nota)
+            print(f"Se deshizo la acción: {accion} - {nota}")
+
+    def revisar(self):
+        if not self.revision:
+            print("No hay notas para revisar.")
+            return
+        nota = self.revision.pop(0)
+        print(f"Nota revisada: {nota}")
+
+    def ordenar_burbuja(self):
+        n = len(self.notas)
+        for i in range(n):
+            for j in range(0, n-i-1):
+                if self.notas[j] > self.notas[j+1]:
+                    self.notas[j], self.notas[j+1] = self.notas[j+1], self.notas[j]
+        print("Notas ordenadas con burbuja:", self.notas)
+
+    def ordenar_insercion(self):
+        for i in range(1, len(self.notas)):
+            clave = self.notas[i]
+            j = i - 1
+            while j >= 0 and clave < self.notas[j]:
+                self.notas[j + 1] = self.notas[j]
+                j -= 1
+            self.notas[j + 1] = clave
+        print("Notas ordenadas con inserción:", self.notas)
+
+# -------------------------------
+# Menú Principal
+# -------------------------------
+def menu():
+    gestor = GestorDeNotas()
+    while True:
+        print("\n--- Menú Principal ---")
+        print("1. Estudiantes")
+        print("2. Cursos")
+        print("3. Gestor de Notas")
+        print("4. Salir")
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            submenu_estudiantes()
+        elif opcion == "2":
+            submenu_cursos()
+        elif opcion == "3":
+            submenu_gestor(gestor)
+        elif opcion == "4":
+            print("Saliendo del sistema. ¡Hasta luego!")
+            break
+        else:
+            print("Opción no válida.")
+
+def submenu_estudiantes():
+    while True:
+        print("\n--- Estudiantes ---")
+        print("1. Agregar")
+        print("2. Buscar")
+        print("3. Actualizar nota")
+        print("4. Mostrar promedio")
+        print("5. Mostrar todos")
+        print("6. Volver")
+        opcion = input("Opción: ")
+
+        if opcion == "1":
+            nombre = input("Nombre: ")
+            nota = float(input("Nota: "))
+            agregar_estudiante(nombre, nota)
+        elif opcion == "2":
+            nombre = input("Nombre a buscar: ")
+            estudiante = buscar_estudiante(nombre)
+            if estudiante:
+                print(f"{estudiante['nombre']} - {estudiante['nota']}")
+            else:
+                print("No encontrado.")
+        elif opcion == "3":
+            nombre = input("Nombre: ")
+            nueva_nota = float(input("Nueva nota: "))
+            actualizar_nota(nombre, nueva_nota)
+        elif opcion == "4":
+            calcular_promedio_estudiantes()
+        elif opcion == "5":
+            mostrar_estudiantes()
+        elif opcion == "6":
+            break
+
+def submenu_cursos():
+    while True:
+        print("\n--- Cursos ---")
+        print("1. Agregar")
+        print("2. Listar")
+        print("3. Eliminar")
+        print("4. Promedio")
+        print("5. Volver")
+        opcion = input("Opción: ")
+
+        if opcion == "1":
+            nombre = input("Nombre del curso: ")
+            nota = float(input("Nota: "))
+            agregar_curso(nombre, nota)
+        elif opcion == "2":
+            listar_cursos()
+        elif opcion == "3":
+            nombre = input("Curso a eliminar: ")
+            eliminar_curso(nombre)
+        elif opcion == "4":
+            promedio_notas_cursos()
+        elif opcion == "5":
+            break
+
+def submenu_gestor(gestor):
+    while True:
+        print("\n--- Gestor de Notas ---")
+        print("1. Agregar nota")
+        print("2. Revisar nota")
+        print("3. Deshacer")
+        print("4. Ordenar burbuja")
+        print("5. Ordenar inserción")
+        print("6. Volver")
+        opcion = input("Opción: ")
+
+        if opcion == "1":
+            nota = float(input("Nota: "))
+            gestor.agregar_nota(nota)
+        elif opcion == "2":
+            gestor.revisar()
+        elif opcion == "3":
+            gestor.deshacer()
+        elif opcion == "4":
+            gestor.ordenar_burbuja()
+        elif opcion == "5":
+            gestor.ordenar_insercion()
+        elif opcion == "6":
+            break
+
+if __name__ == "__main__":
+    menu()
